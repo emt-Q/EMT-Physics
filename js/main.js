@@ -15,8 +15,14 @@
         // 物理粒子背景
         EMT.Particles.init();
 
+        // 通用 UI（导航滚动 / Toast / 页脚年份）
+        EMT.UI.init();
+
         // 应用核心交互（问候 / OCR / 实验启动）
         EMT.OCR.init();
+
+        // AI 学习助手（艾萨克牛顿爵士）
+        EMT.Chat.init();
     }
 
     if (document.readyState === 'loading') {

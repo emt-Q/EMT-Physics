@@ -7,11 +7,13 @@
      3. 导航栏
      4. 头部区域
      5. 主体工作区
-     6. 匹配弹窗
+     6. 匹配弹窗 / 结果提示
      7. 实验启动弹窗
-     8. 页脚
-     9. 响应式适配
-    10. 无障碍（减少动效）
+     8. AI 学习助手（艾萨克牛顿爵士）
+     9. 设置弹窗 / Toast
+    10. 页脚
+    11. 响应式适配
+    12. 无障碍（减少动效 / 焦点可见）
    ============================================================ */
 
 /* ---------- 1. 核心变量：物理美学配色 ---------- */
@@ -33,6 +35,10 @@
 }
 
 /* ---------- 2. 基础样式 / 粒子背景 ---------- */
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
     background-color: #ffffff;
@@ -42,6 +48,10 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     position: relative;
+}
+
+::selection {
+    background: rgba(59, 130, 246, 0.25);
 }
 
 /* 粒子背景层 */
@@ -54,6 +64,22 @@ body {
     z-index: -1;
     pointer-events: none;
     background: radial-gradient(circle at 50% 50%, #f9f9ff 0%, #ffffff 100%);
+}
+
+/* 自定义滚动条（WebKit） */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.14);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.25);
+}
+::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 /* ---------- 3. 导航栏：毛玻璃质感 ---------- */
@@ -79,11 +105,15 @@ nav span {
     padding: 4px 8px;
     border-radius: 8px;
     transition: var(--transition-physics);
+    user-select: none;
 }
 nav span:hover {
     background: rgba(0, 0, 0, 0.03);
     transform: translateY(-1px);
     color: var(--apple-blue);
+}
+nav span:first-child {
+    font-weight: 600;
 }
 
 /* ---------- 4. 头部区域：引力中心 ---------- */
@@ -93,6 +123,7 @@ header {
     background: transparent;
     position: relative;
     overflow: hidden;
+    scroll-margin-top: 60px;
 }
 
 #site-title {
@@ -117,6 +148,7 @@ header {
     margin: 0 auto 40px;
     padding: 0 20px;
     min-height: 80px;
+    scroll-margin-top: 60px;
 }
 
 #mission-text {
@@ -248,6 +280,7 @@ main {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
     border: 1px solid #f0f0f2;
     transition: var(--transition-physics);
+    scroll-margin-top: 60px;
 }
 .workspace-panel:hover {
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), var(--physics-glow);
@@ -291,6 +324,27 @@ main {
 .btn-primary:active {
     transform: scale(0.98);
 }
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--apple-text);
+    border: 1px solid #d2d2d7;
+    padding: 12px 28px;
+    border-radius: 980px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: var(--transition-physics);
+}
+.btn-ghost:hover {
+    border-color: var(--apple-blue);
+    color: var(--apple-blue);
+    transform: translateY(-2px);
+}
 
 /* 个性化问候 */
 #greeting {
@@ -321,6 +375,17 @@ main {
 .upload-area:active {
     transform: scale(0.99);
 }
+/* 拒绝非物理图片时的晃动反馈 */
+.upload-area.shake {
+    animation: shake 0.5s ease;
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+}
 .upload-title {
     font-size: 22px;
     font-weight: 700;
@@ -328,6 +393,7 @@ main {
 }
 .upload-hint {
     color: var(--apple-sub-text);
+    font-size: 14px;
 }
 
 /* 进度条：能量流动动画 */
@@ -398,12 +464,39 @@ main {
     word-wrap: break-word;
     transition: var(--transition-physics);
     position: relative;
+    line-height: 1.7;
+    white-space: pre-wrap;
 }
 .ocr-box:hover {
     box-shadow: var(--physics-glow);
 }
 
-/* ---------- 6. 匹配弹窗：物理能量强化 ---------- */
+/* OCR 工具栏 */
+.ocr-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+.ocr-tool {
+    background: #ffffff;
+    color: var(--apple-blue);
+    border: 1px solid #d2d2d7;
+    padding: 6px 14px;
+    border-radius: 980px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: var(--transition-physics);
+}
+.ocr-tool:hover {
+    border-color: var(--apple-blue);
+    background: rgba(0, 102, 204, 0.05);
+}
+.ocr-tool:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ---------- 6. 匹配弹窗 / 结果提示：物理能量强化 ---------- */
 .match-alert {
     background: linear-gradient(135deg, #e8f5ff 0%, #f0f7ff 100%);
     border-radius: 18px;
@@ -415,6 +508,7 @@ main {
     box-shadow: var(--physics-glow), 0 0 30px rgba(59, 130, 246, 0.15);
     position: relative;
     overflow: hidden;
+    margin-top: 20px;
 }
 /* 物理公式背景点缀 */
 .match-alert::before {
@@ -476,6 +570,66 @@ main {
     background: linear-gradient(90deg, #444, #666);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.phet-attribution {
+    position: relative;
+    z-index: 2;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--apple-sub-text);
+}
+
+/* 物理内容但未匹配提示 */
+.info-alert {
+    background: linear-gradient(135deg, #f0fdf4 0%, #f7fef9 100%);
+    border: 1px solid #bbe7c9;
+    border-radius: 18px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    display: none;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #166534;
+}
+.info-alert strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+/* 非物理内容拒绝提示 */
+.reject-alert {
+    background: linear-gradient(135deg, #fff7ed 0%, #fffdf7 100%);
+    border: 1px solid #fcd9a8;
+    border-radius: 18px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    display: none;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #9a3412;
+    animation: matchBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.reject-alert strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--apple-blue);
+    font-size: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.link-btn:hover {
+    color: #004d99;
 }
 
 @keyframes matchBounce {
@@ -604,7 +758,419 @@ main {
     100% { transform: rotate(360deg); }
 }
 
-/* ---------- 8. 页脚 ---------- */
+/* ---------- 8. AI 学习助手：艾萨克牛顿爵士 ---------- */
+/* 悬浮按钮 */
+.chat-fab {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--brand-gradient);
+    color: #fff;
+    border: none;
+    padding: 12px 20px 12px 14px;
+    border-radius: 980px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.35);
+    transition: var(--transition-physics);
+    animation: fabFloat 3s ease-in-out infinite alternate;
+}
+.chat-fab:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 36px rgba(59, 130, 246, 0.45);
+}
+.chat-fab.hidden {
+    transform: scale(0);
+    opacity: 0;
+    pointer-events: none;
+}
+.chat-fab-icon {
+    font-size: 20px;
+}
+@keyframes fabFloat {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+}
+/* 首次访问提示光圈 */
+.chat-fab.new::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 980px;
+    border: 2px solid rgba(59, 130, 246, 0.6);
+    animation: fabPulse 1.6s ease-out infinite;
+}
+@keyframes fabPulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* 聊天面板 */
+.chat-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 92px;
+    width: 400px;
+    max-width: calc(100vw - 32px);
+    height: min(600px, calc(100vh - 140px));
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+    border: 1px solid #f0f0f2;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 2001;
+    transform: translateY(20px) scale(0.97);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition-physics);
+}
+.chat-panel.open {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--brand-gradient);
+    color: #fff;
+    flex-shrink: 0;
+}
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+.chat-title-wrap {
+    flex: 1;
+    min-width: 0;
+}
+.chat-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+.chat-status {
+    font-size: 12px;
+    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ade80;
+    display: inline-block;
+    animation: statusBlink 2s ease-in-out infinite;
+}
+@keyframes statusBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+.chat-icon-btn {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    transition: var(--transition-physics);
+    flex-shrink: 0;
+}
+.chat-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.32);
+    transform: rotate(15deg);
+}
+
+/* 消息区 */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fafafa;
+}
+.msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.65;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    animation: msgIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes msgIn {
+    0% { opacity: 0; transform: translateY(6px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.msg.user {
+    align-self: flex-end;
+    background: var(--apple-blue);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+}
+.msg.assistant {
+    align-self: flex-start;
+    background: #ffffff;
+    color: var(--apple-text);
+    border: 1px solid #ececf0;
+    border-bottom-left-radius: 5px;
+}
+.msg.system {
+    align-self: center;
+    background: #eef2f7;
+    color: #475569;
+    font-size: 13px;
+    max-width: 95%;
+    text-align: center;
+}
+
+/* 思考中指示器 */
+.msg.thinking {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.msg.thinking .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--apple-blue);
+    animation: thinkingBlink 1s ease-in-out infinite;
+}
+.msg.thinking .dot:nth-child(2) { animation-delay: 0.15s; }
+.msg.thinking .dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes thinkingBlink {
+    0%, 100% { opacity: 0.25; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* 快捷提问 */
+.chat-quick {
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px 4px;
+    overflow-x: auto;
+    background: #fafafa;
+    flex-shrink: 0;
+    scrollbar-width: none;
+}
+.chat-quick::-webkit-scrollbar {
+    display: none;
+}
+.chat-chip {
+    background: #ffffff;
+    border: 1px solid #e3e3e8;
+    border-radius: 980px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: var(--apple-text);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition-physics);
+    flex-shrink: 0;
+}
+.chat-chip:hover {
+    border-color: var(--apple-blue);
+    color: var(--apple-blue);
+    transform: translateY(-1px);
+}
+
+/* 输入区 */
+.chat-input-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #ffffff;
+    border-top: 1px solid #f0f0f2;
+    flex-shrink: 0;
+}
+#chatInput {
+    flex: 1;
+    border: none;
+    background: #f5f5f7;
+    border-radius: 16px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    max-height: 96px;
+    line-height: 1.5;
+    transition: var(--transition-physics);
+}
+#chatInput:focus {
+    background: #ffffff;
+    box-shadow: var(--physics-glow);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+.chat-send {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: var(--brand-gradient);
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: var(--transition-physics);
+    flex-shrink: 0;
+}
+.chat-send:hover {
+    transform: scale(1.08);
+    box-shadow: var(--physics-glow);
+}
+.chat-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ---------- 9. 设置弹窗 / Toast ---------- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.modal-overlay.open {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+}
+.modal-box {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 28px;
+    width: 460px;
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+    animation: matchBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-box h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+}
+.modal-hint {
+    font-size: 13px;
+    color: var(--apple-sub-text);
+    line-height: 1.6;
+    margin: 0 0 18px;
+}
+.modal-field {
+    display: block;
+    margin-bottom: 14px;
+}
+.modal-field span {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--apple-text);
+    margin-bottom: 6px;
+}
+.modal-field input {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #e3e3e8;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    transition: var(--transition-physics);
+}
+.modal-field input:focus {
+    background: #ffffff;
+    border-color: var(--apple-blue);
+    box-shadow: var(--physics-glow);
+}
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.modal-actions .btn-primary,
+.modal-actions .btn-ghost {
+    margin-left: 0;
+    flex: 1;
+}
+.modal-tip {
+    font-size: 12px;
+    color: var(--apple-sub-text);
+    line-height: 1.6;
+    margin: 14px 0 0;
+}
+.modal-tip a {
+    color: var(--apple-blue);
+}
+
+/* Toast */
+.toast-box {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+}
+.toast {
+    background: rgba(29, 29, 31, 0.92);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 980px;
+    font-size: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    max-width: 80vw;
+    text-align: center;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.toast.warn {
+    background: rgba(154, 52, 18, 0.95);
+}
+.toast.success {
+    background: rgba(22, 101, 52, 0.95);
+}
+
+/* ---------- 10. 页脚 ---------- */
 footer {
     background: var(--apple-bg);
     padding: 60px 22px;
@@ -613,6 +1179,7 @@ footer {
     line-height: 1.6;
     margin-top: 80px;
     border-top: 1px solid #e5e5e7;
+    scroll-margin-top: 60px;
 }
 
 .footer-content {
@@ -647,7 +1214,7 @@ footer {
     margin-top: 20px;
 }
 
-/* ---------- 9. 响应式适配 ---------- */
+/* ---------- 11. 响应式适配 ---------- */
 @media (max-width: 768px) {
     #site-title { font-size: 44px; }
     #mission-text { font-size: 20px; }
@@ -657,13 +1224,47 @@ footer {
     .sim-card:hover { transform: translateY(-4px) scale(1.01); }
     #countdownNum { font-size: 80px; }
     #expStartText { font-size: 20px; }
+    .workspace-panel { padding: 32px 20px; }
+    nav { gap: 18px; }
+
+    /* 聊天在移动端变为底部抽屉 */
+    .chat-fab {
+        right: 16px;
+        bottom: 16px;
+        padding: 12px;
+    }
+    .chat-fab-label {
+        display: none;
+    }
+    .chat-panel {
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 20px 20px 0 0;
+    }
+    .modal-box {
+        padding: 20px;
+    }
 }
 
-/* ---------- 10. 无障碍：用户偏好减少动效时关闭动画 ---------- */
+/* ---------- 12. 无障碍：减少动效 / 焦点可见 ---------- */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--apple-blue);
+    outline-offset: 2px;
+    border-radius: 4px;
 }

@@ -3,27 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="EMT Physics – 面向物理初学者的 AI 实验匹配平台：上传题目图片，自动匹配 PhET 交互式仿真实验。">
+    <meta name="description" content="EMT Physics – 面向物理初学者的 AI 实验匹配平台：上传题目图片，自动匹配 PhET 交互式仿真实验，随时向艾萨克牛顿爵士提问。">
+    <meta name="theme-color" content="#3b82f6">
+    <meta property="og:title" content="EMT Physics | 探索物理的无限可能">
+    <meta property="og:description" content="上传物理题目图片，AI 自动匹配 PhET 仿真实验；不会的问题随时问艾萨克牛顿爵士。">
+    <meta property="og:type" content="website">
     <title>EMT Physics | 探索物理的无限可能</title>
 
-    <!-- 样式 -->
+    <!-- 样式与图标 -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="particle-bg"></div>
 
+    <!-- 导航栏 -->
     <nav>
-        <span>EMT Physics</span>
-        <span>实验室</span>
-        <span>愿景</span>
-        <span>关于</span>
+        <span id="navBrand">EMT Physics</span>
+        <span id="navLab">实验室</span>
+        <span id="navVision">愿景</span>
+        <span id="navAbout">关于</span>
     </nav>
 
-    <header>
+    <!-- 头部：引力中心 -->
+    <header id="top">
         <div>
             <h1 id="site-title">EMT Physics</h1>
         </div>
-        <div class="mission-statement">
+        <div class="mission-statement" id="vision">
             <p id="mission-text"></p><span id="cursor-mission" class="cursor"></span>
         </div>
         <div class="header-cta">
@@ -43,16 +50,17 @@
             </div>
         </section>
 
+        <!-- 工作区 -->
         <section class="workspace-panel" id="workspace">
             <div class="input-group">
-                <input type="text" id="username" placeholder="输入探究者姓名">
+                <input type="text" id="username" placeholder="输入探究者姓名" autocomplete="off">
                 <button class="btn-primary" id="greetBtn">继续</button>
             </div>
             <p id="greeting"></p>
 
             <div class="upload-area" id="uploadArea" role="button" tabindex="0" aria-label="上传题目图片">
                 <p class="upload-title">上传题目图片</p>
-                <p class="upload-hint">AI 智能分析关键词并匹配物理仿真实验</p>
+                <p class="upload-hint">AI 智能分析关键词并匹配物理仿真实验 · 已支持 12 类实验</p>
                 <input type="file" id="imageUpload" accept="image/*" hidden>
             </div>
 
@@ -66,25 +74,44 @@
                 </div>
                 <div class="analysis-panel">
                     <div id="ocrResult" class="ocr-box">识别文字将在此显示...</div>
+                    <div class="ocr-toolbar">
+                        <button id="copyOcrBtn" class="ocr-tool" type="button" disabled>复制文字</button>
+                        <button id="clearOcrBtn" class="ocr-tool" type="button" disabled>清空重来</button>
+                    </div>
 
                     <div id="matchNotice" class="match-alert">
                         <h3 class="match-title">匹配成功 / Target Lock</h3>
                         <p id="matchName" class="match-name"></p>
                         <p id="matchQuote"></p>
                         <button id="startExpBtn">开启物理实验</button>
+                        <p class="phet-attribution">实验由 PhET Interactive Simulations 提供</p>
+                    </div>
+
+                    <div id="infoNotice" class="info-alert">
+                        <strong>已识别到物理内容 ✓</strong>
+                        <p>暂未匹配到对应实验。可尝试上传单摆、电路、力与运动等题目，或直接
+                            <button id="askNewtonBtn" class="link-btn" type="button">向艾萨克牛顿爵士提问</button>。</p>
+                    </div>
+
+                    <div id="rejectNotice" class="reject-alert">
+                        <strong>请上传和物理有关的题目哦～</strong>
+                        <p>这张图片似乎不是物理题目。试试上传包含文字描述的物理题（力学、电学、光学、热学等），
+                            或直接向艾萨克牛顿爵士提问。</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- 实验启动弹窗 -->
     <div id="expStartModal">
         <h1 id="countdownNum">3</h1>
         <p id="expStartText">物理引擎预热中...</p>
         <div id="expLoadWave"></div>
     </div>
 
-    <footer>
+    <!-- 页脚 -->
+    <footer id="about">
         <div class="footer-content">
             <div class="footer-mission">
                 Our Mission: Helping more physics beginners access equitable educational opportunities.
@@ -93,20 +120,78 @@
                 Contact Designer: <a href="mailto:emmettqin@foxmail.com">emmettqin@foxmail.com</a>
             </div>
             <div class="footer-copyright">
-                Copyright © 2025 EMT Physics. All Rights Reserved.
+                Copyright © <span id="year">2025</span> EMT Physics. All Rights Reserved.
             </div>
         </div>
     </footer>
+
+    <!-- AI 学习助手：艾萨克牛顿爵士 -->
+    <button id="chatBtn" class="chat-fab" aria-label="向艾萨克牛顿爵士提问">
+        <span class="chat-fab-icon">⚛️</span>
+        <span class="chat-fab-label">艾萨克牛顿爵士</span>
+    </button>
+
+    <div id="chatPanel" class="chat-panel" role="dialog" aria-label="AI 物理助手：艾萨克牛顿爵士">
+        <div class="chat-header">
+            <div class="chat-avatar">⚛️</div>
+            <div class="chat-title-wrap">
+                <div class="chat-title">艾萨克牛顿爵士</div>
+                <div class="chat-status"><span class="status-dot"></span>在线 · 随时提问</div>
+            </div>
+            <button id="chatOpenSettings" class="chat-icon-btn" type="button" aria-label="连接设置">⚙</button>
+            <button id="chatClose" class="chat-icon-btn" type="button" aria-label="关闭聊天">✕</button>
+        </div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div id="chatQuick" class="chat-quick"></div>
+        <div class="chat-input-wrap">
+            <textarea id="chatInput" rows="1" placeholder="向牛顿爵士提问，如：什么是万有引力？"></textarea>
+            <button id="chatSend" class="chat-send" type="button" aria-label="发送">➤</button>
+        </div>
+    </div>
+
+    <!-- AI 连接设置弹窗 -->
+    <div id="aiSettingsModal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>连接豆包大模型</h3>
+            <p class="modal-hint">填写火山方舟（豆包）的 API Key 与模型 ID，浏览器将直连豆包接口。
+                Key 仅保存在你的本地浏览器，不会上传到任何服务器。</p>
+            <label class="modal-field">
+                <span>API Key</span>
+                <input type="password" id="aiKey" placeholder="sk-xxxxxxxx" autocomplete="off">
+            </label>
+            <label class="modal-field">
+                <span>模型 ID</span>
+                <input type="text" id="aiModel" placeholder="在火山方舟控制台创建推理接入点后获取，如 ep-xxxxx">
+            </label>
+            <label class="modal-field">
+                <span>接口地址</span>
+                <input type="text" id="aiEndpoint" placeholder="https://ark.cn-beijing.volces.com/api/v3/chat/completions">
+            </label>
+            <div class="modal-actions">
+                <button id="aiSave" class="btn-primary" type="button">保存并测试连接</button>
+                <button id="aiCancel" class="btn-ghost" type="button">取消</button>
+            </div>
+            <p class="modal-tip">还没有 API Key？前往
+                <a href="https://console.volcengine.com/ark" target="_blank" rel="noopener noreferrer">火山方舟控制台</a>
+                开通豆包大模型并创建推理接入点。未配置时也可点击聊天框下方链接使用豆包网页版。</p>
+        </div>
+    </div>
+
+    <!-- Toast 提示容器 -->
+    <div id="toastBox" class="toast-box" aria-live="polite"></div>
 
     <!-- OCR 引擎（CDN，按需加载语言包） -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
     <!-- 应用脚本（按依赖顺序加载） -->
     <script src="js/config.js"></script>
+    <script src="js/physics-tools.js"></script>
     <script src="js/typewriter.js"></script>
     <script src="js/particles.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/ocr.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

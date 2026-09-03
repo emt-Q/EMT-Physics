@@ -2,64 +2,80 @@
 
 ## Project Overview
 
-EMT Physics is an interactive learning platform designed for beginners in physics, committed to providing equitable access to physics education for learners worldwide. By leveraging AI-powered image recognition, the platform automatically analyzes keywords from physics problems and accurately matches them with corresponding PhET interactive simulations, transforming abstract physics concepts into intuitive, hands-on learning experiences that inspire curiosity and exploration.
+EMT Physics is an interactive learning platform designed for beginners in physics, committed to providing equitable access to physics education for learners worldwide. By leveraging AI-powered image recognition, the platform automatically analyzes keywords from physics problems and accurately matches them with corresponding PhET interactive simulations. A built-in AI learning assistant, **Sir Isaac Newton**, answers physics questions any time, transforming abstract physics concepts into intuitive, hands-on learning experiences.
 
 ## Project Structure
 
 ```
 EMT-Physics/
-├── index.html          # Page structure (entry point)
+├── index.html            # Page structure (entry point)
+├── assets/
+│   └── favicon.svg       # Site icon (atom style)
 ├── css/
-│   └── style.css       # All styles (physics-inspired palette & animations)
+│   └── style.css         # All styles (physics-inspired palette & animations)
 ├── js/
-│   ├── config.js       # Global config (typewriter / sim library / quotes)
-│   ├── typewriter.js   # Mission-statement typewriter animation
-│   ├── particles.js    # Canvas quantum particle background
-│   ├── audio.js        # Web Audio startup sound effect
-│   ├── ocr.js          # OCR recognition + sim matching + interactions
-│   └── main.js         # App entry (module initialization)
-├── README（中文）.md   # Chinese documentation
-└── README(English).md  # English documentation
+│   ├── config.js         # Global config (typewriter / sim library / keywords / AI)
+│   ├── physics-tools.js  # Physics text analysis (relevance & matching, pure functions)
+│   ├── typewriter.js     # Mission-statement typewriter animation
+│   ├── particles.js      # Canvas quantum particle background
+│   ├── audio.js          # Web Audio startup sound effect
+│   ├── ocr.js            # Image preprocessing + OCR recognition + result analysis
+│   ├── chat.js           # AI assistant "Sir Isaac Newton"
+│   ├── ui.js             # Toast / nav scrolling / footer year
+│   └── main.js           # App entry (module initialization)
+├── README（中文）.md     # Chinese documentation
+└── README(English).md    # English documentation
 ```
 
 ## Key Features
 
 ### ✨ Immersive Physics-Inspired Interface
 
-* Frosted-glass navigation bar with animations following realistic motion curves
+* Frosted-glass navigation bar with smooth scrolling to sections
 * Signature spectrum gradient color palette that visualizes the flow of energy
 * Dynamic quantum particle background powered by Canvas, creating an immersive physics-inspired atmosphere
 * Spring-damping page transitions that replicate the feel of real physical motion
 
-### ⌨️ Interactive User Experience
+### 🧠 AI Learning Assistant – "Sir Isaac Newton"
 
-* Typewriter-style mission statement on the homepage with a blinking signal-transmission cursor
-* Personalized greeting for each explorer with subtle interactive feedback
-* Experiment launch countdown featuring explosion animations, energy-pulse buttons, and startup sound effects generated using the native Web Audio API
-* Random physics-themed motivational quotes displayed after a successful experiment match
+* Powered by the Doubao LLM (Volcengine Ark, OpenAI-compatible API), called directly from the browser
+* Ask physics questions any time; responses delivered in Newton's scholarly yet approachable persona
+* Quick-question chips for instant exploration; configure your API key once, and it stays in your local browser
 
 ### 🔍 AI-Powered Simulation Matching
 
 * OCR-based image recognition using Tesseract.js with support for both Chinese and English physics problems
-* Built-in keyword matching engine currently supporting:
-
-  * **Pendulum Lab** (keywords: *pendulum, length, period, simple harmonic motion*, 单摆, 摆长, 周期, 简谐, etc.)
-  * **Circuit Construction Kit** (keywords: *circuit, resistance, current, voltage, Ohm's law*, 电阻, 电流, 电压, 欧姆, etc.)
+* **Enhanced image preprocessing:** auto-rescaling + grayscale + contrast boost for noticeably better recognition accuracy
+* **Physics relevance check:** non-physics images receive a friendly "Please upload a physics-related problem" notice
+* Built-in keyword matching engine supporting **12 PhET simulations**:
+  * Mechanics: Pendulum Lab, Forces & Motion, Projectile Motion, Gravity Force Lab, Buoyancy, Under Pressure, Gravity & Orbits
+  * Electricity: Circuit Construction Kit, Capacitor Lab
+  * Energy: Energy Skate Park, Energy Forms & Changes
+  * Waves: Wave on a String
 * One-click access to official PhET Interactive Simulations with no software installation required
+
+### ⌨️ Interactive User Experience
+
+* Typewriter-style mission statement with a blinking signal-transmission cursor
+* Personalized greeting for each explorer (name remembered locally)
+* Experiment launch countdown with explosion animations, energy-pulse buttons, and Web Audio startup sound
+* Random physics-themed motivational quotes after a successful match
+* One-click copy / clear for OCR results
 
 ### 📱 Cross-Platform Compatibility
 
 * Fully responsive layout optimized for both desktop and mobile browsers
-* Mobile-friendly touch interactions and adaptive typography
+* Chat panel becomes a full-screen bottom sheet on mobile
 
 ---
 
 ## Technology Stack
 
-* **Pure Static Implementation:** Standard project structure with HTML, CSS, and JavaScript organized in separate files (`index.html` + `css/style.css` + `js/` modules), with no build tools or frameworks required
-* **OCR Engine:** Tesseract.js v5 (loaded via CDN with bilingual Chinese-English recognition support)
+* **Pure Static Implementation:** Standard project structure with HTML, CSS, and JavaScript in separate files, no build tools required
+* **OCR Engine:** Tesseract.js v5 (CDN, bilingual support, with image preprocessing pipeline)
+* **AI Assistant:** Doubao LLM / Volcengine Ark API (OpenAI-compatible, direct browser calls)
 * **Physics Simulations:** PhET Interactive Simulations, the open-source physics simulation platform
-* **Audio Effects:** Native Web Audio API for synthesizing startup sound effects without external audio files
+* **Audio Effects:** Native Web Audio API for synthesized startup sound effects
 * **Background Animation:** Canvas 2D rendering for particle-based physics animations
 
 ---
@@ -69,22 +85,31 @@ EMT-Physics/
 ### System Requirements
 
 * Modern web browser (Chrome 90+, Edge 90+, Safari 15+, or newer)
-* Internet connection required for loading the OCR engine and opening PhET simulation pages
+* Internet connection required for the OCR engine, AI assistant, and PhET simulation pages
 
 ### Usage
 
-1. Open the `index.html` file directly in your browser.
-2. Enter your explorer name and click **Continue** to receive a personalized greeting.
-3. Upload a local image containing a physics problem (currently supporting pendulum and circuit-related questions).
-4. Wait for the OCR process to finish. The recognized text will appear in the results panel.
-5. If a matching simulation is found, the corresponding experiment and a motivational quote will be displayed. Click **Launch Physics Experiment**.
-6. After a 3-second launch animation, the corresponding PhET simulation will automatically open in a new browser tab.
+1. Open `index.html` directly in your browser, or deploy to GitHub Pages / any static host.
+2. Enter your explorer name and click **Continue** for a personalized greeting.
+3. Upload a local image containing a physics problem.
+4. Wait for OCR to finish; recognized text appears in the results panel.
+5. If a simulation matches, the experiment name and a motivational quote are displayed. Click **Launch Physics Experiment**.
+6. After the 3-second launch animation, the PhET simulation opens in a new tab.
+7. Stuck on a concept? Click **Sir Isaac Newton** (bottom-right) and ask anytime.
+
+### Configure the AI Assistant (one-time setup)
+
+1. Click **Sir Isaac Newton** → the ⚙ button in the chat header.
+2. Go to the [Volcengine Ark Console](https://console.volcengine.com/ark) and enable the Doubao LLM.
+3. Create an inference endpoint; paste your API Key and Model ID into the settings.
+4. Click **Save & Test Connection**; you are ready once it reports success.
+> Security note: your API key is stored only in your local browser. Use a restricted key and keep it safe.
 
 ---
 
 ## Extending the Platform
 
-To support additional physics topics, modify the `EMT.PHYSICS_SIMS` array in `js/config.js`:
+Add more physics topics by editing `EMT.PHYSICS_SIMS` in `js/config.js`:
 
 ```javascript
 EMT.PHYSICS_SIMS = [
@@ -97,13 +122,16 @@ EMT.PHYSICS_SIMS = [
 ];
 ```
 
+To tune the physics relevance check, edit `EMT.PHYSICS_KEYWORDS` and `EMT.PHYSICS_STRONG_KEYWORDS`.
+
 ---
 
 ## Notes
 
-* OCR accuracy depends on image quality, text clarity, and contrast. Clear images with minimal background interference are recommended.
+* OCR accuracy depends on image quality and contrast; clear images with minimal background interference are recommended.
 * Simulation pages are hosted on the official PhET platform, so an internet connection is required.
-* During the first use of the OCR feature, your browser will automatically download the required Chinese and English language models, which may take a few seconds.
+* On first OCR use, the browser downloads Chinese and English language models, which may take a few seconds.
+* The AI assistant requires a valid Ark API key and network connection.
 
 ---
 
