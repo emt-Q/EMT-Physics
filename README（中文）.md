@@ -3,6 +3,23 @@
 ## 项目简介
 EMT Physics 是一个面向物理初学者的交互式学习平台，致力于为更多学习者提供平等的物理教育机会。平台通过AI图像识别技术自动分析物理题目关键词，精准匹配对应的PhET交互式物理仿真实验，让抽象的物理概念变得直观可感，激发学习者的探索兴趣。
 
+## 项目结构
+```
+EMT-Physics/
+├── index.html          # 页面结构（入口文件）
+├── css/
+│   └── style.css       # 全部样式（物理美学配色与动画）
+├── js/
+│   ├── config.js       # 全局配置（打字机参数 / 实验库 / 激励语录）
+│   ├── typewriter.js   # 使命宣言打字机动画
+│   ├── particles.js    # Canvas 量子粒子背景
+│   ├── audio.js        # Web Audio 启动音效
+│   ├── ocr.js          # OCR 识别 + 实验匹配 + 交互逻辑
+│   └── main.js         # 应用入口（模块初始化）
+├── README（中文）.md   # 中文说明文档
+└── README(English).md  # English Documentation
+```
+
 ## 核心功能
 ✨ **沉浸式物理美学界面**
 - 毛玻璃质感导航栏，跟随物理运动曲线的交互动画
@@ -28,7 +45,7 @@ EMT Physics 是一个面向物理初学者的交互式学习平台，致力于�
 - 移动端优化的触控交互与字体大小
 
 ## 技术栈
-- **纯静态实现**：单HTML文件，内嵌CSS样式与原生JavaScript逻辑，无需构建工具
+- **纯静态实现**：标准项目结构，HTML / CSS / JavaScript 分文件组织（`index.html` + `css/style.css` + `js/` 模块），无需构建工具
 - **OCR引擎**：Tesseract.js v5（CDN加载，支持中英文识别）
 - **仿真实验**：PhET Interactive Simulations 开源物理仿真平台
 - **音效生成**：Web Audio API 原生合成启动音效，无需外部音频文件
@@ -45,13 +62,13 @@ EMT Physics 是一个面向物理初学者的交互式学习平台，致力于�
    5. 体验3秒实验启动动画后，将自动在新标签页打开PhET仿真实验室
 
 ## 扩展说明
-如需添加更多物理实验类型，可在 `index.html` 的JavaScript代码中修改 `PHYSICS_SIMS` 数组：
+如需添加更多物理实验类型，可在 `js/config.js` 中修改 `EMT.PHYSICS_SIMS` 数组：
 ```javascript
-const PHYSICS_SIMS = [
-    { 
-        name: '实验名称 / English Name', 
-        keywords: ['关键词1', '关键词2', 'english keyword'], 
-        url: 'PhET实验链接' 
+EMT.PHYSICS_SIMS = [
+    {
+        name: '实验名称 / English Name',
+        keywords: ['关键词1', '关键词2', 'english keyword'],
+        url: 'PhET实验链接'
     },
     // 继续添加更多实验
 ];

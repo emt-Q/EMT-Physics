@@ -4,6 +4,24 @@
 
 EMT Physics is an interactive learning platform designed for beginners in physics, committed to providing equitable access to physics education for learners worldwide. By leveraging AI-powered image recognition, the platform automatically analyzes keywords from physics problems and accurately matches them with corresponding PhET interactive simulations, transforming abstract physics concepts into intuitive, hands-on learning experiences that inspire curiosity and exploration.
 
+## Project Structure
+
+```
+EMT-Physics/
+├── index.html          # Page structure (entry point)
+├── css/
+│   └── style.css       # All styles (physics-inspired palette & animations)
+├── js/
+│   ├── config.js       # Global config (typewriter / sim library / quotes)
+│   ├── typewriter.js   # Mission-statement typewriter animation
+│   ├── particles.js    # Canvas quantum particle background
+│   ├── audio.js        # Web Audio startup sound effect
+│   ├── ocr.js          # OCR recognition + sim matching + interactions
+│   └── main.js         # App entry (module initialization)
+├── README（中文）.md   # Chinese documentation
+└── README(English).md  # English documentation
+```
+
 ## Key Features
 
 ### ✨ Immersive Physics-Inspired Interface
@@ -38,7 +56,7 @@ EMT Physics is an interactive learning platform designed for beginners in physic
 
 ## Technology Stack
 
-* **Pure Static Implementation:** A single HTML file containing embedded CSS and native JavaScript, with no build tools or frameworks required
+* **Pure Static Implementation:** Standard project structure with HTML, CSS, and JavaScript organized in separate files (`index.html` + `css/style.css` + `js/` modules), with no build tools or frameworks required
 * **OCR Engine:** Tesseract.js v5 (loaded via CDN with bilingual Chinese-English recognition support)
 * **Physics Simulations:** PhET Interactive Simulations, the open-source physics simulation platform
 * **Audio Effects:** Native Web Audio API for synthesizing startup sound effects without external audio files
@@ -66,10 +84,10 @@ EMT Physics is an interactive learning platform designed for beginners in physic
 
 ## Extending the Platform
 
-To support additional physics topics, simply modify the `PHYSICS_SIMS` array in the JavaScript section of `index.html`:
+To support additional physics topics, modify the `EMT.PHYSICS_SIMS` array in `js/config.js`:
 
 ```javascript
-const PHYSICS_SIMS = [
+EMT.PHYSICS_SIMS = [
     {
         name: 'Simulation Name',
         keywords: ['keyword1', 'keyword2', 'keyword3'],
